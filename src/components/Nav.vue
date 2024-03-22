@@ -1,17 +1,20 @@
 <script setup>
 import { ref } from 'vue';
-import { RouterLink } from 'vue-router';
+import { RouterLink, useRouter } from 'vue-router';
 import Container from './Container.vue';
 import AuthModal from './AuthModal.vue';
 
 const searchUserName = ref("");
 const isAuth = ref(false);
 
+const router = useRouter()
 const onSearch = () => {
-
+    if (searchUserName.value) {
+        router.push(`/profile/${searchUserName.value}`)
+        searchUserName.value = ""
+    }
 }
 
-// <a-button type="primary">Login</a-button>
 </script>
 
 <template>
