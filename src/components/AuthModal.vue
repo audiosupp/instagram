@@ -4,7 +4,7 @@ import { useUserStore } from '@/stores/users.js';
 import { storeToRefs } from 'pinia';
 
 const userStore = useUserStore();
-const { errorMessage, loading } = storeToRefs(userStore);
+const { errorMessage, loading, user } = storeToRefs(userStore);
 
 
 const visible = ref(false);
@@ -18,12 +18,25 @@ const userCredentials = reactive({
 const showModal = () => {
     visible.value = true;
 };
-const handleOk = (e) => {
-    userStore.handleSignup(userCredentials)
+
+const clearUserCredentialsInput = () => {
+    userCredentials.email = "";
+    userCredentials.password = "";
+    userCredentials.username = "";
+    userStore.clearErrorMessage();
+}
+
+const handleOk = async (e) => {
+    await userStore.handleSignup(userCredentials)
+    if (user.value) {
+        visible.value = false
+        clearUserCredentialsInput();
+    }
 };
 
 const handleCancel = () => {
-    userStore.clearErrorMessage()
+    userStore.clearErrorMessage();
+    clearUserCredentialsInput();
     visible.value = false
 }
 
@@ -33,7 +46,7 @@ const title = props.isLogin ? 'Login' : 'SignUp';
 <template>
     <div>
         <a-button type="primary" @click="showModal" class="btn">{{ title }}</a-button>
-        <a-modal v-model:visible="visible" :title="title" @ok="handleOk">
+        <a-modal v-model:open="visible" :title="title" @ok="handleOk">
             <template #footer>
                 <a-button key="back" @click="handleCancel">Cancel</a-button>
                 <a-button :disabled="loading" key="submit" type="primary" :loading="loading"
