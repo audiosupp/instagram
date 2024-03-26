@@ -17,6 +17,7 @@ const userCredentials = reactive({
 });
 const showModal = () => {
     visible.value = true;
+
 };
 
 const clearUserCredentialsInput = () => {
@@ -53,7 +54,7 @@ const title = props.isLogin ? 'Login' : 'SignUp';
 <template>
     <div>
         <a-button type="primary" @click="showModal" class="btn">{{ title }}</a-button>
-
+        {{ user }}
         <a-modal v-model:open="visible" :title="title" @ok="handleOk">
             <template #footer>
                 <a-button key="back" @click="handleCancel">Cancel</a-button>
