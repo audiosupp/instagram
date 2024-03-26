@@ -1,9 +1,11 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
+import { supabase } from '@/supabase'
 
 export const useUserStore = defineStore('users', () => {
   const user = ref(null)
   const errorMessage = ref('')
+  const loading = ref(false);
 
   const validateEmail = (email) => {
     return String(email)
@@ -15,7 +17,7 @@ export const useUserStore = defineStore('users', () => {
 
   const handleLogin = () => { }
 
-  const handleSignup = (credentials) => {
+  const handleSignup = async (credentials) => {
     const { email, password, username } = credentials;
 
     if (password.length < 6) {
@@ -30,12 +32,41 @@ export const useUserStore = defineStore('users', () => {
       return errorMessage.value = "Email is invalid"
     }
 
+    loading.value = true;
+
+    const { data: userWithUsername } = await supabase.from("users").select().eq('username', username).single();
+    if (userWithUsername) {
+      loading.value = false;
+      return errorMessage.value = "User already exists";
+    }
+
     errorMessage.value = "";
+
+    const { error } = await supabase.auth.signUp({
+      email,
+      password
+    })
+
+    if (error) {
+      loading.value = false;
+      return errorMessage.value = error.message;
+    }
+
+    await supabase.from("users").insert({
+      username,
+      email
+    });
+
+    loading.value = false;
   }
 
   const handleLogout = () => { }
 
   const getUser = () => { }
 
-  return { user, errorMessage, handleLogin, handleSignup, handleLogout, getUser }
+  const clearErrorMessage = () => {
+    errorMessage.value = "";
+  }
+
+  return { user, errorMessage, loading, handleLogin, handleSignup, handleLogout, getUser, clearErrorMessage }
 })
