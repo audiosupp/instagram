@@ -1,10 +1,11 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, defineProps } from 'vue';
 import { supabase } from '@/supabase';
 import { useUserStore } from '@/stores/users';
 import { storeToRefs } from 'pinia';
 
 const loading = ref(false);
+const props = defineProps(['addNewPost']);
 const errorMessage = ref("");
 const userStore = useUserStore();
 const { user } = storeToRefs(userStore);
@@ -34,10 +35,19 @@ const handleOk = async (e) => {
                 caption: caption.value,
                 owner_id: user.value.id
             })
+
+            props.addNewPost({
+                url: data.path,
+                caption: caption.value,
+                owner_id: user.value.id
+            })
         }
+
     }
 
     loading.value = false;
+    open.value = false;
+    caption.value = "";
 };
 const handleUploadChange = (e) => {
     if (e.target.files[0]) {

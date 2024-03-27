@@ -2,11 +2,13 @@
 import { defineProps } from 'vue';
 
 const props = defineProps(['posts'])
+const storageFullPath = 'https://dsrweebolpprswxqnznb.supabase.co/storage/v1/object/public/images/';
+
 </script>
 
 <template>
     <div class="image-gallary-container">
-        <img v-for="post in props.posts" :key="post.id" :src="post.url" alt="">
+        <img v-for="post in props.posts" :key="post.id" :src="storageFullPath + post.url" alt="">
     </div>
 </template>
 

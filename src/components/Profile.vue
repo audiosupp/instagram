@@ -2,6 +2,12 @@
 import Container from './Container.vue';
 import Userbar from './Userbar.vue';
 import ImageGallary from './ImageGallary.vue';
+import { ref } from 'vue';
+
+const posts = ref([]);
+const addNewPost = (post) => {
+    posts.value.unshift(post);
+}
 
 </script>
 
@@ -12,17 +18,9 @@ import ImageGallary from './ImageGallary.vue';
                 posts: 4,
                 followers: 100,
                 following: 342
-            }"></Userbar>
-            <ImageGallary :posts="[
-                {
-                    id: 1,
-                    url: 'https://www.kauffmannsguitarstore.com/wp-content/uploads/2023/10/Gibson-SG-1969-24.jpg'
-                },
-                {
-                    id: 1,
-                    url: 'https://www.kauffmannsguitarstore.com/wp-content/uploads/2023/10/Gibson-SG-1969-24.jpg'
-                },
-            ]"></ImageGallary>
+
+            }" :addNewPost=addNewPost></Userbar>
+            <ImageGallary :posts="posts"></ImageGallary>
         </div>
     </Container>
 </template>
