@@ -17,7 +17,10 @@ const props = defineProps(['user', 'username', 'userInfo', "addNewPost"]);
     <div class="userbar-container" v-if="props.user">
         <div class="top-content">
             <a-typography-title :level="2">{{ props.user.username }}</a-typography-title>
-            <UploadPhotoModal v-if="user && profileUsername === user.username" :addNewPost="addNewPost" />
+            <div v-if="user">
+                <UploadPhotoModal v-if="profileUsername === user.username" :addNewPost="addNewPost" />
+                <a-button v-else>Follow</a-button>
+            </div>
         </div>
         <div class="bottom-content">
             <a-typography-title :level="5">{{ props.userInfo.posts }}</a-typography-title>
