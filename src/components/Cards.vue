@@ -1,5 +1,12 @@
 <script setup>
+import { supabase } from '@/supabase';
 import Card from './Card.vue';
+import { useUserStore } from '@/stores/users';
+import { storeToRefs } from 'pinia';
+import { onMounted } from 'vue';
+
+const userStore = useUserStore();
+const { user } = storeToRefs(userStore);
 
 const data = [
     {
@@ -21,6 +28,15 @@ const data = [
         caption: "ava ai"
     }
 ]
+
+const fetchData = async () => {
+    const response = await supabase.from("followers_following").select("following_id").eq("follower_id", user.value.id);
+    console.log(response);
+}
+
+onMounted(() => {
+    fetchData();
+})
 
 </script>
 
