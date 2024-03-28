@@ -2,13 +2,13 @@
 import { defineProps } from 'vue';
 
 const propsPost = defineProps(['post']);
-const storageFullPath = 'https://dsrweebolpprswxqnznb.supabase.co/storage/v1/object/public/images/';
+const { VITE_BASE_PHOTO_URL } = import.meta.env;
 </script>
 
 <template>
     <a-card hoverable style="width: 240px" class="card">
         <template #cover>
-            <img :alt="post.caption" :src="storageFullPath + post.url" />
+            <img :alt="post.caption" :src="VITE_BASE_PHOTO_URL + post.url" />
         </template>
         <a-card-meta :title="post.username">
             <template #description>{{ post.caption }}</template>
